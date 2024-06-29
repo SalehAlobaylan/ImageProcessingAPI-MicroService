@@ -1,0 +1,20 @@
+{
+  "name": "imageprocessingapi",
+  "version": "1.0.0",
+  "description": "This is udacity Fulstack Js dev project",
+  "main": "index.js",
+  "scripts": {
+    "test": "testing",
+    "lint": "eslint 'index.js'",
+    "prettier": "prettier --config .prettierrc '*.js' --write"
+  },
+  "author": "SalehAlobaylan",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.6.0",
+    "eslint": "^9.6.0",
+    "globals": "^15.6.0",
+    "prettier": "^3.3.2",
+    "typescript-eslint": "^7.14.1"
+  }
+}
