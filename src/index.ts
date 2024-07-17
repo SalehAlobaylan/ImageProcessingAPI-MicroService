@@ -1,22 +1,22 @@
 import express from 'express';
 import route from './Routes/Routes';
-import path from 'path';
-
 
 // primary endpoint
 const app = express();
 const port = 3000;
 
-app.use('/Images', express.static(path.join(__dirname, 'Images')));
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'images', 'DMASO2.png'));
-  
-});
-
-
+//Start express server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
+
   // Set up Routes
-app.get('placeholder', route);
+  app.get('/placeholder', route);
 });
+
+// Exporting app to use it in the unit testing
+export default app; 
+
+
+
+//     Here to use the API and test it
+// http://localhost:3000/placeholder?width=600&height=600
