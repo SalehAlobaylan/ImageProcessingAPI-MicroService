@@ -15,7 +15,7 @@ and learning how to do it with this library
 the last time i didn.t notice the video of the demo for this project so i didn't understand the project description when it talk about storing the sizes of images 
 so i did a few failed attempts until i saw the demo project video 
 
-*i'm gonna continue the read me file in another time then push my commited changes to the repo :) *
+
 
 
             the project
