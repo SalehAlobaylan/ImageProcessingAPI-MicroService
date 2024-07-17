@@ -26,10 +26,15 @@ const getCachedimgPath = (prevPath: string, width: number, height: number): stri
 placeholder.get('/placeholder', async (req, res) => {
 
   // defining the sizes by using query and setting it 400 by default
+  const imgName = req.query.image as string;
   const width = parseInt(req.query.width as string, 10) || 400;
   const height = parseInt(req.query.height as string, 10) || 400;
 
-  const imgPath = path.join(__dirname, 'full', 'DMASO2.jpg'); 
+  // if (!imgName) {
+  //   return res.status(400).send('Image name is required');
+  // }
+
+  const imgPath = path.join(__dirname, 'full', imgName);
   console.log(imgPath); // just testing the path right after defining it
   
         if (!fs.existsSync(imgPath)) {

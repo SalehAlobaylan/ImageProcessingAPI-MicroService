@@ -19,4 +19,4 @@ export default app;
 
 
 //     Here to use the API and test it
-// http://localhost:3000/placeholder?width=600&height=600
+// http://localhost:3000/placeholder?image=DMASO1.jpg&width=400&height=400
