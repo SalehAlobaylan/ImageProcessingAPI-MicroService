@@ -8,6 +8,7 @@ http://localhost:3000/placeholder?image=DMASO1.jpg&width=400&height=400
 
 -To check the code quality with prettier use this sciprt:
 npm run pret
+
 -To check the code quality with Eslint use this script:
 npm run lint
 
