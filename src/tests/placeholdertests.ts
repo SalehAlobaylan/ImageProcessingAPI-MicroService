@@ -56,7 +56,7 @@ describe("getImageBuffer function", () => {
 
 describe("getCachedimgPath function", () => {
   it("should return the correct cached image path", (): void => {
-    const prevPath = path.join(__dirname, "../../full", "DMASO2.jpg"); // Adjust the path accordingly
+    const prevPath = path.join(__dirname, "../../full", "DMASO2.jpg");
     const width = 400;
     const height = 400;
     const cachedPath = getCachedimgPath(prevPath, width, height);
@@ -64,7 +64,7 @@ describe("getCachedimgPath function", () => {
       __dirname,
       "../../thumb",
       "DMASO2-400x400.jpg",
-    ); // Adjust the path accordingly
+    );
     expect(cachedPath).toBe(expectedPath);
     console.log("Sixth test");
   });
