@@ -1,18 +1,19 @@
             How to use
 
 -to start the server run this script:
-    npm run img
+npm run img
 
 -then go to this URL (You can customize it):
-    http://localhost:3000/placeholder?image=DMASO1.jpg&width=400&height=400
+http://localhost:3000/placeholder?image=DMASO1.jpg&width=400&height=400
 
 -To check the code quality with prettier use this sciprt:
-    npm run pret
+npm run pret
+
 -To check the code quality with Eslint use this script:
-    npm run lint
+npm run lint
 
 -To test the code with jasmine run this script:
-    npm run test
+npm run test
 
   
             Summary
