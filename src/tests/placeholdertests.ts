@@ -1,5 +1,7 @@
 import request from "supertest"; // this library to test the servers
 import app from "../index";
+import path from "path";
+import { getImageBuffer, getCachedimgPath } from "../placeholder";
 
 describe("GET /placeholder", () => {
   it("should serve the primary endpoint", async (): Promise<void> => {
@@ -40,5 +42,30 @@ describe("GET /placeholder", () => {
       .query({ image: "nonexistent.jpg", width: 400, height: 400 });
     console.log("fourth test");
     expect(response.status).toBe(404);
+  });
+});
+
+describe("getImageBuffer function", () => {
+  it("should return a buffer for a valid image path", (): void => {
+    const imgPath = path.join(__dirname, "../../full", "DMASO2.jpg");
+    const buffer = getImageBuffer(imgPath);
+    expect(buffer).toBeInstanceOf(Buffer);
+    console.log("Fifth test");
+  });
+});
+
+describe("getCachedimgPath function", () => {
+  it("should return the correct cached image path", (): void => {
+    const prevPath = path.join(__dirname, "../../full", "DMASO2.jpg"); // Adjust the path accordingly
+    const width = 400;
+    const height = 400;
+    const cachedPath = getCachedimgPath(prevPath, width, height);
+    const expectedPath = path.join(
+      __dirname,
+      "../../thumb",
+      "DMASO2-400x400.jpg",
+    ); // Adjust the path accordingly
+    expect(cachedPath).toBe(expectedPath);
+    console.log("Sixth test");
   });
 });

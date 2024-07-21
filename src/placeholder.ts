@@ -8,29 +8,25 @@ const placeholder = express.Router();
 // I'm gonna add the comments after experimenting somethings firstly :)
 
 // here i extracted the path and store it as a buffer
-const getImageBuffer = (imgPath: string): Buffer => {
+export const getImageBuffer = (imgPath: string): Buffer => {
   // as you see it returns a type
   return fs.readFileSync(imgPath);
 };
 
-try {
-  // now we want to make sure that the img sizes cached so in this function
-  // we use basename method to store the name of the path then store it in
-  // the thumb file with the customized sizes beside it
-  const getCachedimgPath = (
-    prevPath: string,
-    width: number,
-    height: number,
-  ): string => {
-    // as you see it returns a type
-    const fileName = path.basename(prevPath, path.extname(prevPath));
-    return path.join(
-      __dirname,
-      "../thumb",
-      `${fileName}-${width}x${height}.jpg`,
-    );
-  };
+// now we want to make sure that the img sizes cached so in this function
+// we use basename method to store the name of the path then store it in
+// the thumb file with the customized sizes beside it
+export const getCachedimgPath = (
+  prevPath: string,
+  width: number,
+  height: number,
+): string => {
+  // as you see it returns a type
+  const fileName = path.basename(prevPath, path.extname(prevPath));
+  return path.join(__dirname, "../thumb", `${fileName}-${width}x${height}.jpg`);
+};
 
+try {
   // here we going to define a GET route at the path
   placeholder.get("/placeholder", async (req, res): Promise<void> => {
     // as you see it returns a type
