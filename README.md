@@ -20,24 +20,16 @@ npm run img
 Then visit:  
 `http://localhost:3000/placeholder?image=DMASO1.jpg&width=400&height=400`
 
-## Scripts
-
-- `npm run img` &nbsp;&nbsp;&nbsp; Start the server  
-- `npm run pret` &nbsp;&nbsp; Format code with Prettier  
-- `npm run lint` &nbsp;&nbsp; Lint code with ESLint  
-- `npm run test` &nbsp;&nbsp; Run Jasmine tests  
-
 ## Features
 
 - Dynamic image resizing and caching  
 - TypeScript & Express backend  
 - Code linting, formatting, and testing
 
----
 
-**License:** MIT  
-**Author:** [SalehAlobaylan](https://github.com/SalehAlobaylan)
+## Scripts
 
----
-
-Let me know if you want more specific badges or further customization!
+- `npm run img` &nbsp;&nbsp;&nbsp; Start the server  
+- `npm run pret` &nbsp;&nbsp; Format code with Prettier  
+- `npm run lint` &nbsp;&nbsp; Lint code with ESLint  
+- `npm run test` &nbsp;&nbsp; Run Jasmine tests  
