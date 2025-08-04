@@ -2,72 +2,108 @@ import express from "express";
 import fs from "fs";
 import path from "path";
 import sharp from "sharp";
+import { FULL_DIR, THUMB_DIR } from "./config";
 
 const placeholder = express.Router();
 
-// I'm gonna add the comments after experimenting somethings firstly :)
-
-// here i extracted the path and store it as a buffer
+// Extract the image file into a Buffer so Sharp can manipulate it
 export const getImageBuffer = (imgPath: string): Buffer => {
-  // as you see it returns a type
   return fs.readFileSync(imgPath);
 };
 
-// now we want to make sure that the img sizes cached so in this function
-// we use basename method to store the name of the path then store it in
-// the thumb file with the customized sizes beside it
+// Build the cache file path given the original path and requested dimensions & format
 export const getCachedimgPath = (
   prevPath: string,
   width: number,
   height: number,
+  format: string = "jpg",
 ): string => {
-  // as you see it returns a type
   const fileName = path.basename(prevPath, path.extname(prevPath));
-  return path.join(__dirname, "../thumb", `${fileName}-${width}x${height}.jpg`);
+  return path.join(THUMB_DIR, `${fileName}-${width}x${height}.${format}`);
 };
 
-try {
-  // here we going to define a GET route at the path
-  placeholder.get("/placeholder", async (req, res): Promise<void> => {
-    // as you see it returns a type
-    // defining the sizes by using query and setting it 400 by default
-    const imgName = req.query.image as string;
-    const width = parseInt(req.query.width as string, 10) || 400;
-    const height = parseInt(req.query.height as string, 10) || 400;
-    if (!imgName) {
-      res.status(400).send("Image name is required");
-      return;
-    }
+// Allowed output formats mapped to proper MIME types
+type OutputFormat = "jpg" | "jpeg" | "png" | "webp";
+const formatMime: Record<OutputFormat, string> = {
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+  webp: "image/webp",
+};
 
-    const imgPath = path.join(__dirname, "../full", imgName);
-    console.log(imgPath); // just testing the path right after defining it
+// GET /placeholder?image=<name>&width=<w>&height=<h>&format=png&quality=90
+placeholder.get("/", async (req, res): Promise<void> => {
+  const imgName = req.query.image as string;
+  const width = parseInt(req.query.width as string, 10) || 400;
+  const height = parseInt(req.query.height as string, 10) || 400;
+  const requestedFormat = (
+    (req.query.format as string) || "jpg"
+  ).toLowerCase() as OutputFormat;
+  const quality = req.query.quality
+    ? parseInt(req.query.quality as string, 10)
+    : undefined;
 
-    if (!fs.existsSync(imgPath)) {
-      res.status(404).send("Image not found");
-      return;
-    }
+  // Validate mandatory params
+  if (!imgName) {
+    res.status(400).send("Image name is required");
+    return;
+  }
 
-    const cachedimgPath = getCachedimgPath(imgPath, width, height);
+  // Validate format
+  if (!Object.keys(formatMime).includes(requestedFormat)) {
+    res.status(400).send("Unsupported format. Use jpg, png, or webp.");
+    return;
+  }
 
-    if (fs.existsSync(cachedimgPath)) {
-      // Serve the cached image
-      res.sendFile(cachedimgPath);
-      return;
-    }
+  const imgPath = path.join(FULL_DIR, imgName);
 
-    //Here storing the image before resizing it
+  if (!fs.existsSync(imgPath)) {
+    res.status(404).send("Image not found");
+    return;
+  }
+
+  const cachedimgPath = getCachedimgPath(
+    imgPath,
+    width,
+    height,
+    requestedFormat,
+  );
+
+  // If we already have a cached version with these dimensions/format, serve it directly
+  if (fs.existsSync(cachedimgPath)) {
+    res.set("Content-Type", formatMime[requestedFormat]);
+    res.sendFile(cachedimgPath);
+    return;
+  }
+
+  try {
+    // Resize and cache the new thumbnail
     const imageBuffer = getImageBuffer(imgPath);
-    const resizedImage = await sharp(imageBuffer) // using sharp library to resize it
-      .resize(width, height)
-      .toBuffer(); // i could also change the type of the image here by usimg .jpeg for example
-    // but i already have my final type
+    let transformer = sharp(imageBuffer).resize(width, height);
+
+    switch (requestedFormat) {
+      case "jpg":
+      case "jpeg":
+        transformer = transformer.jpeg({ quality: quality ?? 80 });
+        break;
+      case "png":
+        transformer = transformer.png({ quality: quality ?? 80 });
+        break;
+      case "webp":
+        transformer = transformer.webp({ quality: quality ?? 80 });
+        break;
+    }
+
+    const resizedImage = await transformer.toBuffer();
 
     fs.writeFileSync(cachedimgPath, resizedImage);
 
-    res.set("Content-Type", "image/jpg"); //tells the client that the content being sent is a JPG image
+    res.set("Content-Type", formatMime[requestedFormat]);
     res.send(resizedImage);
-  });
-} catch (error) {
-  console.log("Internal Server Error");
-}
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 export default placeholder;

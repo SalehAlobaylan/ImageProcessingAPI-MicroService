@@ -1,16 +1,16 @@
 import express from "express";
 import route from "./Routes";
+import { PORT } from "./config";
 
 // primary endpoint
 const app = express();
-const port = 3000;
 
-//Start express server
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+// Register routes before starting the server
+app.use(route);
 
-  // Set up Routes
-  app.get("/placeholder", route);
+// Start express server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
 // Exporting app to use it in the unit testing
